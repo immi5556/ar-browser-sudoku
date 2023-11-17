@@ -1,6 +1,8 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z734F5Y)
 # Augmented Reality Sudoku Solver
 
+video by this lib creator: https://www.youtube.com/watch?v=cOC-ad0BsY0
+
 You can find details on how this project works in the video. You can also try it out here:
 
 https://sudoku.cmgresearch.com
@@ -33,6 +35,7 @@ cd app
 yarn
 yarn start
 ```
+error fix: https://stackoverflow.com/a/73027407/3263689
 
 If you want to run the app locally then you will need to use something like `ngrok` to proxy `https` connections from your phone to your local server (most phones will not allow access to the camera unless the page is served over https).
 

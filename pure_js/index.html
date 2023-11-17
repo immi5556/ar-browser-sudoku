@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+
+    <!-- Adds the WASM backend to the global backend registry -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js"></script>
+</head>
+
+<body>
+    <video ref="" id="video">
+        <script>
+            tf.setBackend('wasm').then(() => console.log('wasm backend done..'));
+            var video = document.querySelector("#video");
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        video.srcObject = stream;
+                        video.onloadedmetadata = (e) => {
+                            video.play();
+                        };
+                    })
+                    .catch(function (err0r) {
+                        console.log("Something went wrong!");
+                    });
+            }
+        </script>
+</body>
+
+</html>
