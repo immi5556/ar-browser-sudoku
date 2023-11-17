@@ -112,9 +112,16 @@ function App() {
                             return `${acc}_${processor.solvedPuzzle[key].map(t => t.digit).join()}`;
                         }, '');
                         console.log('rest match', mashed, last_rest);
+                        //disable auto capture and move to long press
+                        //if (last_rest != mashed) {
+                        //    rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
+                        //    last_rest = mashed;
+                        //}
                         if (last_rest != mashed) {
-                            rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
-                            last_rest = mashed;
+                            if (long_touch) {
+                                rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
+                                last_rest = mashed;
+                            }
                         }
                     }
                 }
@@ -124,6 +131,29 @@ function App() {
             window.clearInterval(interval);
         };
     }, [previewCanvasRef]);
+
+    var timer;
+    var touchduration = 500; //length of time we want the user to touch before we do something
+
+    var long_touch = false;
+    var touchstart = () => {
+        long_touch = false;
+        console.log('long pressed start reset...')
+        timer = setTimeout(onlongtouch, touchduration);
+    }
+    var touchend = () => {
+        long_touch = false;
+        //stops short touches from firing the event
+        console.log('long pressed end reset...')
+        if (timer)
+            clearTimeout(timer); // clearTimeout, not cleartimeout..
+    }
+    var onlongtouch = () => {
+        console.log('long pressed...')
+        long_touch = true;
+    };
+    window.addEventListener('touchstart', touchstart, false);
+    window.addEventListener('touchend', touchend, false);
 
     // update the video scale as needed
     useEffect(() => {
