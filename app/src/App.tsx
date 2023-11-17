@@ -1,4 +1,6 @@
+import { data } from "@tensorflow/tfjs";
 import React, { useRef, useState, useEffect } from "react";
+import { setTimeout } from "timers";
 import "./App.css";
 import Processor, { VideoReadyPayload } from "./augmentedReality/Processor";
 import StatsPanel from "./components/StatsPanel";
@@ -6,7 +8,9 @@ import StatsPanel from "./components/StatsPanel";
 // start processing video
 const processor = new Processor();
 const rest_img = document.getElementById("rest-capture");
+const capture = document.getElementById("capture");
 let last_rest = '';
+let d_url = null;
 function App() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,6 +41,7 @@ function App() {
     // render the overlay
     useEffect(() => {
         const interval = window.setInterval(() => {
+            //capture.style.display = 'none';
             const canvas = previewCanvasRef.current;
             if (canvas && processor.isVideoRunning) {
                 // update the peformance stats
@@ -112,17 +117,24 @@ function App() {
                             return `${acc}_${processor.solvedPuzzle[key].map(t => t.digit).join()}`;
                         }, '');
                         console.log('rest match', mashed, last_rest);
+                        capture.style.display = '';
+                        var dataurl = canvas.toDataURL();
+                        ((du) => setTimeout(() => {
+                            capture.style.display = 'none';
+                        }, 2000))(dataurl);
+                        
                         //disable auto capture and move to long press
                         //if (last_rest != mashed) {
                         //    rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
                         //    last_rest = mashed;
                         //}
-                        if (last_rest != mashed) {
-                            if (long_touch) {
-                                rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
-                                last_rest = mashed;
-                            }
-                        }
+
+                        //if (last_rest != mashed) {
+                        //    if (long_touch) {
+                        //        rest_img.innerHTML = rest_img.innerHTML + "<img src='" + canvas.toDataURL() + "'>";
+                        //        last_rest = mashed;
+                        //    }
+                        //}
                     }
                 }
             }
@@ -132,28 +144,28 @@ function App() {
         };
     }, [previewCanvasRef]);
 
-    var timer;
-    var touchduration = 500; //length of time we want the user to touch before we do something
+    //var timer;
+    //var touchduration = 500; //length of time we want the user to touch before we do something
 
-    var long_touch = false;
-    var touchstart = () => {
-        long_touch = false;
-        console.log('long pressed start reset...')
-        timer = setTimeout(onlongtouch, touchduration);
-    }
-    var touchend = () => {
-        long_touch = false;
-        //stops short touches from firing the event
-        console.log('long pressed end reset...')
-        if (timer)
-            clearTimeout(timer); // clearTimeout, not cleartimeout..
-    }
-    var onlongtouch = () => {
-        console.log('long pressed...')
-        long_touch = true;
-    };
-    window.addEventListener('touchstart', touchstart, false);
-    window.addEventListener('touchend', touchend, false);
+    //var long_touch = false;
+    //var touchstart = () => {
+    //    long_touch = false;
+    //    console.log('long pressed start reset...')
+    //    timer = setTimeout(onlongtouch, touchduration);
+    //}
+    //var touchend = () => {
+    //    long_touch = false;
+    //    //stops short touches from firing the event
+    //    console.log('long pressed end reset...')
+    //    if (timer)
+    //        clearTimeout(timer); // clearTimeout, not cleartimeout..
+    //}
+    //var onlongtouch = () => {
+    //    console.log('long pressed...')
+    //    long_touch = true;
+    //};
+    //window.addEventListener('touchstart', touchstart, false);
+    //window.addEventListener('touchend', touchend, false);
 
     // update the video scale as needed
     useEffect(() => {

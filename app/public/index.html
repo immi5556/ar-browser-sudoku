@@ -1,15 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, minimal-ui"
-    />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, minimal-ui" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Sudoku Augmented Reality" />
+    <meta name="description" content="Sudoku image solver" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <style>
+        body, html {
+            height: 100%;
+            background: #fff;
+        }
+
+        .container {
+            width: 200px;
+            height: 100%;
+            margin: 0 auto 0;
+            -webkit-perspective: 1000;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .pulse-button {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            margin-left: -50px;
+            margin-top: -50px;
+            display: block;
+            width: 200px;
+            height: 200px;
+            font-size: 2em;
+            font-weight: light;
+            font-family: 'Trebuchet MS', sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 200px;
+            letter-spacing: -1px;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            background: #5a99d4;
+            cursor: pointer;
+            box-shadow: 0 0 0 0 rgba(90, 153, 212, 0.5);
+            -webkit-animation: pulse 1.5s infinite;
+        }
+
+            .pulse-button:hover {
+                -webkit-animation: none;
+            }
+
+        @-webkit-keyframes pulse {
+            0% {
+                -moz-transform: scale(0.9);
+                -ms-transform: scale(0.9);
+                -webkit-transform: scale(0.9);
+                transform: scale(0.9);
+            }
+
+            70% {
+                -moz-transform: scale(1);
+                -ms-transform: scale(1);
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                box-shadow: 0 0 0 50px rgba(90, 153, 212, 0);
+            }
+
+            100% {
+                -moz-transform: scale(0.9);
+                -ms-transform: scale(0.9);
+                -webkit-transform: scale(0.9);
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(90, 153, 212, 0);
+            }
+        }
+
+    </style>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -24,38 +91,25 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Sudoku Augmented Reality Demo</title>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-98353062-4"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "UA-98353062-4");
-    </script>
-    <script
-      type="text/javascript"
-      src="https://ko-fi.com/widgets/widget_2.js"
-    ></script>
-    <style>
-      .floatingchat-container-wrap {
-        margin-bottom: 20px;
-      }
-    </style>
-    <!-- <script type="text/javascript">
-      kofiwidget2.init("Buy me a coffee", "#29abe0", "Z8Z734F5Y");
-      kofiwidget2.draw();
-    </script> -->
-  </head>
-  <body>
+    <title>Sudoku Solver (ARK)</title>
+</head>
+<body style="overflow-x:hidden;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-      <div id="rest-capture"></div>
-  </body>
+    <div id="rest-capture"></div>
+    <div id="capture" style="position:absolute; bottom: 130px; left: 0px; width:100%;z-index: 1500; height: 50px;text-align:center;">
+        <div class='container' id="capture-rest">
+            <span class='pulse-button' style="">Capture Result</span>
+        </div>
+    </div>
+    <script>
+        var capt = document.getElementById("capture-rest");
+        var act_dataurl = null;
+        capt.addEventListener("click", () => {
+            var cvs = document.querySelector(".preview-canvas");
+            var rest_img = document.getElementById("rest-capture");
+            rest_img.innerHTML = rest_img.innerHTML + "<img src='" + cvs.toDataURL() + "'>";
+        });
+    </script>
+</body>
 </html>
